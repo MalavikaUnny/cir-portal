@@ -31,6 +31,7 @@ from django.http import HttpResponseBadRequest
 import datetime
 from django.core.exceptions import PermissionDenied
 from registration.forms import student_fields
+from registration.models import Student
 
 class CurrentUserMixin(object):
     model = User
@@ -90,11 +91,11 @@ def handle_student_upload(request):
                 counter = counter+1
 
             return render_to_response('register/cirstaff/register_bulk_student_list.html',{'counter':counter },
-                                       context_instance=RequestContext(request))
+                                      context_instance=RequestContext(request))
         else :
-             return redirect(request.META['HTTP_REFERER'])
+            return redirect(request.META['HTTP_REFERER'])
     else:
-         return HttpResponseBadRequest()
+        return HttpResponseBadRequest()
 
 
 class StudentListView(LoginRequiredMixin,ListView):
@@ -116,3 +117,15 @@ class StudentListUpdateView(UpdateView):
             return obj
         else:
             raise Http404("That doesnt exist.")
+
+class StudentFilterExternalView(ListView):
+    template_name ='register/cirstaff/filter_external_list.html'
+    def get_queryset(self):
+        cgpa = self.request.GET.get('cgpa')
+        arrears=self.request.GET.get('arrear')
+        branch=self.request.GET.get('branch')
+        tenth=self.request.GET.get('tenth')
+        twelth=self.request.GET.get('twelth')
+
+        print(cgpa + arrears + branch + tenth + twelth)
+        return Student.Objects.filter(cgpa__gte=cgpa, curr_arrears=arrears, branch=branch, tenth_mark__gte=tenth, twelth_mark__gte=twelth)
