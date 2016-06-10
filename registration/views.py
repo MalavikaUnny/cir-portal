@@ -31,7 +31,7 @@ from django.http import HttpResponseBadRequest
 import datetime
 from django.core.exceptions import PermissionDenied
 from registration.forms import student_fields
-from registration.models import Student
+from registration.models import Student,Test
 
 class CurrentUserMixin(object):
     model = User
@@ -129,3 +129,12 @@ class StudentFilterExternalView(ListView):
 
         print(cgpa + arrears + branch + tenth + twelth)
         return Student.Objects.filter(cgpa__gte=cgpa, curr_arrears=arrears, branch=branch, tenth_mark__gte=tenth, twelth_mark__gte=twelth)
+
+class StudentTechnicalTestEntryView(TemplateView):
+    template_name = "register/cirstaff/tests/technical_test.html"
+
+
+    def get_context_data(self, **kwargs):
+        context = super(StudentTechnicalTestEntryView, self).get_context_data(**kwargs)
+        context['myvar'] = Test.Objects.all()
+        return context

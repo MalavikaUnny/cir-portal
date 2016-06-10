@@ -4,6 +4,8 @@ from bootstrap3_datetime.widgets import DateTimePicker
 from captcha.fields import ReCaptchaField
 
 from registration.models import *
+from registration.models import Student,User,TechTest
+
 from django.forms.models import ModelForm
 
 class UploadFileForm(forms.Form):
@@ -66,12 +68,9 @@ student_fields = ['name','curr_course','branch','tenth_mark','twelth_mark',
                   's1','s2','s3','s4','s6','cgpa','curr_arrears','hist_arrears']
 
 class StudentRegistrationForm(ModelForm):
-
     class Meta:
         model = Student
         fields = ['aums_id'] + student_fields
-
-
 
 
 
